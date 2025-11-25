@@ -8,6 +8,7 @@ import joblib
 from sqlalchemy import create_engine
 import os 
 from dotenv import load_dotenv 
+from pathlib import Path
 
 # Setup & Config
 load_dotenv()
@@ -22,44 +23,69 @@ db_name = os.getenv("DB_ANALYTICS")
 conn_string = f"mysql+pymysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 engine =create_engine(conn_string)
 
-MODEL_PATH = 'models/kmeans_model.pkl'
-SCALER_PATH = 'models/scaler.pkl'
+BASE_DIR = Path(__file__).resolve().parent
+
+MODEL_PATH = BASE_DIR/'models'/'kmeans_model.pkl'
+SCALER_PATH = BASE_DIR/'models'/'scaler.pkl'
 
 # Create a function to dynamically assign the segment/persona names to clusters 
-def assign_segment_name(cluster_centers,cluster_id):
+def assign_segment_name(row,cluster_centers):
     """
-    Dynamically assigns a business name to a cluster ID based on its centroid values.
-    Logic (based on Scaled Log Data):
-    - High Monetary + High Frequency = Champions
-    - Low Recency (Negative scaled value) + Low Frequency = New / Promising
-    - High Recency (Positive scaled value) = Lost
-    - Everything else = Loyal / Active
+    Assigns a segment name based on a combination of the K-Means Cluster
+    CONSTRAINT WITH business rules
+    - (1) Champions: High Monetary + High Frequency + Low Recency
+    - (2) New / Promising : Low Recency (Negative scaled value) + Low Frequency
+    - (3) Lost Whales: High Recency + High Monetary + Low Frequency
+    - (4) Loyal / Active: High Freq + Low Recency  
+    - (5) Churn : Low Monetary + High Recency + Low Freq  
     
     Args:
-        cluster_centers (np.array): The array of centroids from kmeans.cluster_centers_
-        cluster_id (int): The cluster ID to name.
+        row (pd.Series): A single row of the dataframe with 'recency', 'frequency', 'monetary', and 'Cluster'.
+        cluster_centers (np.array): The centroids from the model (used for fallback/context).
     
     Returns:
         str: The business segment name.
-    """   
+    """  
+    # Extract raw values 
+    recency = row['recency']
+    freq = row['frequency']
+    monetary = row['monetary']
+    cluster_id = int(row['Cluster'])
+
     # Get the centroid for a cluster 
     centroid = cluster_centers[cluster_id]
-    
     r_score = centroid[0] # recency
-    m_score = centroid[1] # monetary
-    f_score = centroid[2] # frequency 
+    f_score = centroid[1] # frequency
+    m_score = centroid[2] # monetary
     
-    if m_score > 0.5 and f_score > 0.5:
-        return 'Champions'
-    elif r_score > 0.5:
-        return 'Lost'
-    elif r_score < -0.5 and f_score < 0:
-        return 'New / Promising'
-    else:
-        return 'Loyal / Active'
+    # Setting the base_segment using centroid 
+    
+    base_segment = 'Lost' # Default 
+    
+    if m_score > 0.8 and f_score > 0.5 and r_score < 0.5: 
+        base_segment = 'Champions'
+    elif f_score > 0.2 and r_score < 0.5:
+        base_segment = 'Loyal / Active'
+    elif r_score < -0.5:
+        base_segment = 'New / Promising'
 
-# Create a function 
-def run_interence():
+    else:
+        base_segment= 'Lost'
+    
+    # Before getting the centroid it, apply the business rules to override K-mean model's clusters
+    # Rule 1: if the recency > 540 days (customers haven't bought for 2 years) --> "Lost" regardless of monetary value
+    if recency > 540:
+        if base_segment == 'Lost':
+            return "Lost"
+        else: 
+            return f"Lost {base_segment}"
+    # Rule 2: if the customers are very new (< 120 days) and have low freq, keep them as "New"
+    elif recency < 120 and freq ==1: 
+        return 'New / Promising'
+    return base_segment
+
+# Create a function for run_inference
+def run_inference():
     # Load new data from SQL view 
     print("Reading updated...")
     df_rmf = pd.read_sql('SELECT * FROM view_rmf_base',engine)
@@ -73,8 +99,8 @@ def run_interence():
     try:
         kmeans_model = joblib.load(MODEL_PATH)
         scaler = joblib.load(SCALER_PATH)
-    except FileNotFoundError:
-        print("Model not found. Please run and check Notebook 04.")
+    except Exception as e:
+        print(f"Error occurred: {e}. Please run and check Notebook 04.")
         return
     # Preprocessing: Transform the data to normalize the distribution 
     print("Preprocessing data...")
@@ -83,29 +109,36 @@ def run_interence():
     
     # Scale using the LOADED scaler model
     rmf_scaled = scaler.transform(df_log)
+    df_rmf_scaled = pd.DataFrame(rmf_scaled,columns=['recency','frequency','monetary'])
     
     # Predict segment with the loaded model 
-    print("Predict with K-Means model...")
-    df_rmf['Cluster'] = kmeans_model.predict(rmf_scaled)
+    try:
+        print("Predict with K-Means model...")
+        df_rmf['Cluster'] = kmeans_model.predict(df_rmf_scaled)
+    except Exception as e:
+        print(f"Error occured: {e}. Stop the pipeline.")
+        return
 
     # Map the segment names
     print("Generating dynamic segment map...")
     centers = kmeans_model.cluster_centers_
-    num_clusters = len(centers)
-    dynamic_map = {}
     
-    for i in range(num_clusters):
-        dynamic_map[i] = assign_segment_name(centers,i)
-        
-    print(f"Map created: {dynamic_map}")
-    df_rmf['Segment_name'] = df_rmf['Cluster'].map(dynamic_map)
+    # Apply the segment name function 
+    df_rmf['Segment_name'] = df_rmf.apply(lambda row: assign_segment_name(row,centers), axis=1)
     
+    df_segment = df_rmf.groupby('Cluster')['Segment_name'].unique()
+    print("The final segmentation:")
+    print(df_segment)
+    
+    # Create a column with less granularity 
+    df_rmf['Segment_group'] = df_rmf['Segment_name'].apply(lambda x: "Lost" if "Lost" in str(x) else x)
+
     # Save to production table 
     print("Save results to 'analytics_rmf_segments'...")
     df_rmf.to_sql('analytics_rmf_segments',engine, if_exists='replace',index=False)
-    print("Pipeline Completed. Data is refreshed")
+    print("Pipeline Completed. Data is refreshed.")
 
 if __name__ == "__main__":
-    run_interence()
+    run_inference()
 
     
