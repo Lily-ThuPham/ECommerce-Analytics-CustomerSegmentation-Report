@@ -129,7 +129,6 @@ def run_inference():
     df_segment = df_rmf.groupby('Cluster')['Segment_name'].unique()
     print("The final segmentation:")
     print(df_segment)
-    
     # Create a column with less granularity 
     df_rmf['Segment_group'] = df_rmf['Segment_name'].apply(lambda x: "Lost" if "Lost" in str(x) else x)
 
