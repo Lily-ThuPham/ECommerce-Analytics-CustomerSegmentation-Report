@@ -28,7 +28,7 @@ A modular ELT pattern is implemented rather than traditional ETL to prioritize r
         - Validation: Removing "ghost" orders where status = delivered but delivered_date is NULL.
         - Modeling: Structuring data into Fact and Dimension tables for the Star Schema.
 
-1.3 Data Lineage Flow
+### **1.3 Data Lineage Flow**
 
 ```
 graph LR
