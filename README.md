@@ -120,3 +120,42 @@ Analysis of Olist's performance _(2016-2018)_ reveals **_a business driven heavi
     - **At risk**: The `toys` category shows a relatively **_high cancellation rate (0.88%)_** despite **_faster‑than‑average delivery_** (11.7 days vs. 12.5 days). Combined with its negative growth trend, this category requires immediate attention—such as deeper audits of sellers and outbound operations.
     - **Special case**: `office_furniture` has the longest logistics cycle (20.6 days) and high freight costs, yet maintains a low cancellation rate (0.1%). This suggests a unique operational model that differs from the rest of the portfolio.
 
+### _**4.4 Customer Segmentation & Behavior (R-M-F framework)**_
+![Customer Segmentation Dashboard](images/Customer-segmentation-dashboard.jpg)
+
+To get a clearer view of customer behavior,the customers were grouped into distinct segments using their recency, frequency, and spending patterns.
+
+**Excellent customer acquisitions but low retention rates**:
+- In 2018, over **52,000 new customers were acquired**, making up 98.7% of the active base. Only **2,100 customers** returned from prior periods — a clear signal that retention remains critically low.
+- The business model is heavily reliant on **constant new customer acquisition**, with limited contribution from repeat buyers. **Customer Lifetime Value (CLV)** averages **$137**, driven solely by **1.03 purchases per customer** — a flat trend year over year.
+- O**ne-time buyers** represent **87.6%** of the total customer base, yet they contribute **80.9% of total revenue (~$10.7M)**. Meanwhile, a small but valuable segment — **9.5% of customers** — placed **10+ orders**, generating $1.66M in GMV. A targeted **basket analysis** of this high-frequency group could unlock more opportunities.
+
+**Segmentation Profile** Using K-Means clustering, the current customer base was divided into three core personas:
+- **Champions** (17.8% of Base | High Value, Recent):
+    - _Profile:_ These are the most valuable users, with the **highest Average Ticket ($218.7)** and have made purchased within the past year.
+    - _Behavior:_ They are willing to **spend nearly 2x more** than new users ($114.1), hence their high wallet share **17.9%**, making them the ideal target for "VIP" loyalty programs.
+
+- **New / Promising** (31.0% of Base | Moderate Value, Very Recent):
+    - _Profile:_ T**he largest active segment**. They have transacted recently (132 days avg recency) but have **a lower average spend ($114.1)**.
+    - _Opportunity:_ induce a second purchase within 90 days to prevent them from slipping into the "Lost" bucket.
+
+- **Lost** (18.0% of Base | Low Value, Long Inactive):
+    - Profile: Customers haven't purchased in over 240 days.
+    - The majority are **regular lost customer**s (17.9% of the base) who made only one purchase with **a moderate average spend of $140**. Because the business relies heavily on first‑time buyers, this group still represents the **largest wallet share** at 56% (~$7.4M).
+    - A very small subset are **“Lost Champions”** — previously high‑value customers who have been inactive for more than 500 days, indicating long‑term disengagement despite their strong historical value.
+
+**Customer behavior deep dive**:
+
+![Customer Segment behavoir breakdown](images/segment-behavior.png)
+
+- **Occasional buyers** suspected: The _"Lost Champions"_ segment shows very short intervals between their past orders, suggesting they may have purchased intensively for a specific project or during a promotional period, with no ongoing need afterward. Effective re‑engagement will require targeting them with messages that reconnect to the original purpose or context of their past purchases. 
+- Furthermore, their consistently positive reviews reinforce that their departure stems from low engagement rather than dissatisfaction with the experience.
+- In contrast, **true _"Champions"_** maintain a consistent purchasing rhythm and remain active to date. Their predictable behavior creates strong opportunities for targeted “Replenishment” or “New Arrival” notifications to stimulate repeat purchases.
+- **The Payment Standard:** Credit Card usage is surprisingly uniform across all segments (75% - 77%), proving that payment friction is not a barrier to retention. The differentiator is the product need, not the payment method.
+- **Installments Behavior - Average of 3 installments:** Higher‑value customers — _"Champions"_ and _"Lost Champions"_ — tend to choose larger installment amounts. However, across all segments, customers appear *not particularly price‑sensitive*, indicating that Olist’s installment options are well‑received and do not present a barrier to purchase.
+
+**Ratings and Segment Insights**:
+- **Overall satisfaction is high**, with an average review score of **~4.2/5**. Interestingly, the _"Champions"_ segment — the most valuable group — shows the _lowest average score at **3.9**_, signaling higher expectations or more critical feedback.
+    - **High ratings dominate** across all segments (~70%), while the remaining reviews are split fairly evenly between medium and low ratings. However, **low ratings make up a noticeably larger share** among high‑value groups (_"Lost Champions"_ and _"Lost"_):
+    - Nearly **17% of Champion reviews are negative**, compared with only **7.4% among New Customers**.
+- **Multi‑order shoppers naturally expect more from the platform**. Their lower ratings may reflect: A desire to provide constructive feedback, or, genuine frustration from encountering issues across multiple purchases. In either case, these signals point to a clear need for experience improvements.
