@@ -6,8 +6,7 @@
 2. [Data Structure](#2-data-structure)  
 3. [Executive Summary](#3-executive-summary)  
 4. [Insights Deep Dive](#4-insights-deep-dive)  
-5. [Sales Forecasting Model](#5-sales-forecasting-model)  
-6. [Recommendations](#6-recommendations)  
+5. [Recommendations](#5-recommendations)  
 
 ## _**1. Project Background**_
 **Olist** is a E-commerce marketplace that connects small businesses (sellers) to customers across the country. As an internal Data Analyst, I have been tasked with analyzing the company's performance from 2016 to 2018 to identify growth opportunities and operational bottlenecks.
@@ -25,13 +24,15 @@ _**Technical Stack:**_
 - Python (Pandas/Scikit-Learn): Data cleaning, feature engineering, and K-Means clustering.
 - Power BI: Visualizing and Storytelling with interactive dashboards.
 
+An interactive Power BI dashboard used to explore these insights can be found [here](https://app.powerbi.com/view?r=eyJrIjoiYmUxYjYyN2EtMmU3NS00NzRlLWI4ZjYtNDBjOTE0Y2Y1MDgzIiwidCI6IjE2NzIwYmVkLTY1ZWItNGFhMi04ZjMwLWQxY2UxNzBjZjAwMCIsImMiOjEwfQ%3D%3D&pageName=000e5656b61190d4c961)
+
 The Python scripts used for the ELT pipeline and Inference Engine can be found [here](code).
 
 The Python and SQL scripts to data preparation and EDA can be found [here](code/Data_preparation.ipynb) and [here](code/EDA.ipynb).
 
 The SQL views used for dynamic scoring can be found [here](code/view_rmf_base_script.sql).
 
-An interactive Power BI dashboard used to explore these insights can be found [here](https://app.powerbi.com/view?r=eyJrIjoiYmUxYjYyN2EtMmU3NS00NzRlLWI4ZjYtNDBjOTE0Y2Y1MDgzIiwidCI6IjE2NzIwYmVkLTY1ZWItNGFhMi04ZjMwLWQxY2UxNzBjZjAwMCIsImMiOjEwfQ%3D%3D&pageName=000e5656b61190d4c961)
+
 
 ## **2. Data Structure**
 This project utilizes a structured data model **built in MySQL** (`db_olist_analytics`) to ensure accurate reporting. The company database is organized into two main types of tables: **Fact Tables** (which record business events like orders) and **Dimension Tables** (which describe the "who, what, and where").
@@ -60,6 +61,8 @@ Before analysis, a rigorous cleaning process was applied to the raw data to ensu
 **Overview of Findings**
 
 Analysis of Olist's performance _(2016-2018)_ reveals **_a business driven heavily by new customer acquisition_** (total orders **YoY ~21.5%**). While the platform has successfully grown its visitor base, retention remains a critical challenge, **_as one-time buyers account for the vast majority of transactions_** (**~87%**). Product performance follows a steep Pareto distribution, where just 23% of categories generate 80% of total Gross Merchandise Volume (GMV). Operationally, rapid scaling has strained logistics, leading to a **slight decline in on-time delivery rates (YoY -2.2%)** — a key factor that directly correlates with lower customer sentiment and review scores.
+
+![Overview Dashboard](images/Overview_dashboard.png)
 
 ## _**4. Insights Deep Dive**_
 
@@ -106,19 +109,19 @@ Analysis of Olist's performance _(2016-2018)_ reveals **_a business driven heavi
 
 - Revenue is highly concentrated (80/20 Pareto principle): The **_top 23% of product categories (17 out of 73 actives) generate 80% of total GMV_**. `health_beauty` (10.5%) and `watches_gifts` (9.5%) are the clear "Hero" categories, driving consistent volume and high ticket sizes.
 
-![Top and Bottom Categories by GMV](images/Top-bottom-categories.png)
-
 - Top categories growth: 
     - **`health_beauty`** is not only the largest category but also one of **_the fastest-growing (+59.5% YoY)_**, significantly outperforming the company average of 21%. `watches_gifts` (#2) also shows robust momentum with **+44.6% YoY growth**.
     - Several substantial categories are seeing alarming declines in sales volume despite the overall platform growth: **`cool_stuff` (-40.3%), `toys` (-43.8%)**.
 - While the top categories continue to outperform their past results, the weaker categories have been shrinking sharply — _most notably in fashion_, where sales in female fashion and other fashion segments **_have fallen by 69% to 79%_**.
 
-![Top contributors breakdown](images/pareto_breakdown.png)
+![Top and Bottom Categories by GMV](images/Top-bottom-categories.png)
 
 - **"Operational Matrix" - Delivery days vs. Canceled Rate**: Based on the analysis, the top‑contributing categories fall into three distinct operational profiles.
     - **Standard performers**: - Categories with a cancellation rate below 0.9% and delivery times under 12 days. The strongest performers belong to this group, including `health_beauty`, `watches_gifts`, and `bed_bath_table`.
     - **At risk**: The `toys` category shows a relatively **_high cancellation rate (0.88%)_** despite **_faster‑than‑average delivery_** (11.7 days vs. 12.5 days). Combined with its negative growth trend, this category requires immediate attention—such as deeper audits of sellers and outbound operations.
     - **Special case**: `office_furniture` has the longest logistics cycle (20.6 days) and high freight costs, yet maintains a low cancellation rate (0.1%). This suggests a unique operational model that differs from the rest of the portfolio.
+
+![Top contributors breakdown](images/pareto_breakdown.png)
 
 ### _**4.4 Customer Segmentation & Behavior (R-M-F framework)**_
 ![Customer Segmentation Dashboard](images/Customer-segmentation-dashboard.jpg)
@@ -159,3 +162,43 @@ To get a clearer view of customer behavior,the customers were grouped into disti
     - **High ratings dominate** across all segments (~70%), while the remaining reviews are split fairly evenly between medium and low ratings. However, **low ratings make up a noticeably larger share** among high‑value groups (_"Lost Champions"_ and _"Lost"_):
     - Nearly **17% of Champion reviews are negative**, compared with only **7.4% among New Customers**.
 - **Multi‑order shoppers naturally expect more from the platform**. Their lower ratings may reflect: A desire to provide constructive feedback, or, genuine frustration from encountering issues across multiple purchases. In either case, these signals point to a clear need for experience improvements.
+
+## _**5. Recommendations**_
+Based on the data, Olist is currently prioritizing acquisition volume over unit economics. To address the retention leak and operational friction, I propose the following actions:
+
+**Executive Strategy: Shift from "Volume" to "Basket Value"**:
+- Observation: While order volume grew by 21.5%, Average Order Value (AOV) has remained stagnant ($120–$137). Additionally, 87% of the user base consists of one-time buyers, indicating a failure to monetize the post-purchase lifecycle.
+- Recommendation: Show smart bundles and “add‑on” items during checkout. Encouraging customers to add one or two extra items is the most effective way to increase basket size, helping offset rising logistics costs and boosting the value of one-time shoppers. 
+
+**Logistics & Operations: Reducing “High-cost Revenue” and Customer Friction**:
+- Observation: Late deliveries have surged by **66.2% YoY**, signaling growing operational strain. At the same time, certain categories—such as Toys—show a **0.9% cancellation rate** despite fast delivery times, suggesting the root issue is **inventory accuracy**, not logistics speed.
+- Recommendations: 
+    - **Strengthen Seller SLAs to Reduce Stock‑Out Cancellations**: Audit the bottom 20% of sellers with the highest “out‑of‑stock” cancellation rates. Apply penalties or remove sellers who repeatedly fail to fulfill confirmed orders. 
+    - **Improve Delivery Time Estimates for Higher Reliability**: Customer satisfaction is driven more by predictability than delivery speed. Adjust the delivery‑estimate algorithm to include buffer time for complex routes. Prioritize On‑Time Performance (OTP) over overly optimistic delivery promises to reduce negative reviews.
+
+**Category Management: Strategic Portfolio Allocation**
+- Observation: Revenue is heavily concentrated, with **17 categories generating 80% of GMV**. Performance varies sharply: Health & Beauty is accelerating (+59.5%), while Toys is declining (‑43.8%), largely due to operational and seller‑quality issues rather than demand.
+- Recommendations: 
+    - Defend High‑Value Categories: Strengthen supply chain reliability for top‑performing categories such as Health & Beauty and Watches. Actions may include: exclusive logistics rates, dedicated account management, etc. 
+    - Fix Underperforming Categories: focus on improving seller quality and fulfillment accuracy, reducing stock‑out cancellations.
+
+**Customer Retention: Mitigating Churn in High‑Value Segments**
+- Observation: The platform excels at acquiring new customers, but long‑term engagement remains weak. While one‑time buyers generate the majority of revenue, a small but powerful cohort — 9.5% of customers placing 10+ orders — contributes disproportionately to GMV. 
+- Recommendations: 
+    1. **Protect and Elevate Champions (High Value, High Expectations)**: Prioritize service reliability, deploy personalized “Replenishment” and “New Arrival” nudges aligned with their predictable purchase cycles to reinforce loyalty. Identify recurring pain points in fulfillment, product quality, or post‑purchase experience
+    2. **Accelerate Second Purchases for New/Promising Users (Largest Segment, High Potential)**: This group is recent and engaged but has lower average spend and is at risk of slipping into inactivity after ~90 days. Trigger targeted campaigns within the first 60–90 days to drive a second purchase, using tailored recommendations and light incentives, build early habits before churn risk increases.
+    3. **Re‑Engage Lost Customers with Context‑Driven Messaging**: The majority of Lost users made only one purchase but still represent 56% of wallet share. A small subset — Lost Champions — previously purchased in short bursts, likely tied to specific projects or promotions. Action:
+        - Use contextual win‑back campaigns that reference past purchase categories or project‑based needs.
+        - For Lost Champions, emphasize new assortments, improved availability, or upgraded product lines to reconnect with their original intent.
+
+## _**End of Documents**_
+This project uses the publicly available Olist e‑commerce dataset, a well‑known resource that provides real marketplace data for analytical and modeling purposes. I acknowledge Olist for making this dataset accessible to the data community, enabling practical exploration of customer behavior and operational performance.
+
+Thank you for reviewing this E-commerce Site - Olist Analysis. I hope the insights and recommendations provided offer a clear, data-driven understanding of the a typical E-commerce platform operations. 
+
+For any questions, further discussions, or to connect, please feel free to reach out:
+
+- Email: thuanhpham.da@gmail.com
+- LinkedIn: Link to My LinkedIn Profile
+- Other Projects: Explore my other data analytics projects on GitHub.
+- Your feedback is highly valued!
