@@ -74,8 +74,26 @@ The model is optimized for high-cardinality filtering:
     - Standard Scaling to ensure equal weighting of features.
     - Elbow Method to determine optimal K (3 Clusters).
 
+## _**4. Business Application & Operational Workflow**_
+To maintain the dashboard's relevance, the data pipeline is designed to be refreshed on a Weekly Cadence.
 
-## **_5. Assumptions, Caveats & Modifications_**
+**Who Uses This?**
+- *Analytics Engineer:* Responsible for scheduling the Python scripts (via Cron or Airflow) and monitoring database integrity.
+- *Business Analyst:* Consumes the final Output in Power BI (refreshing the .pbix file after the pipeline runs).
+
+**Execution Steps & Scripts:**
+
+| Step                     | Script / File                  | Function                                                                 | Recommended Context                                                                                   |
+|--------------------------|--------------------------------|---------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
+| **1. Ingestion & Cleaning** | `code/Data_preparation.ipynb` | **ETL:** Extracts new raw data, validates referential integrity, and updates `db_olist_analytics`. | Run daily or weekly depending on order volume. In production, convert this notebook into a `.py` script. |
+| **2. Customer Scoring**     | `code/inference_pipeline.py` | **ML Inference:** Connects to the database, loads the pre‑trained K‑Means model (`.pkl`), and assigns customer segments. | Run weekly. Customer segments (RFM) change slowly, so real‑time scoring is unnecessary.                 |
+| **3. Reporting**            | Power BI Dashboard            | **Visualization:** Reads updated tables and refreshes measures.           | Manual refresh by analyst or scheduled refresh via Power BI Service.                                   |
+
+**Customization for Business Context:**
+- **Dynamic Recency:** The current `inference_pipeline.py` calculates Recency based on the dataset's static max date. For Live Business Context, the script logic is customizable to use `datetime.now()` to calculate Recency relative to the actual current date.
+- **Environment Variables:** The pipeline uses a `.env` file for credentials (`DB_USER`, `DB_PASSWORD`), allowing seamless switching between Staging and Production environments without code changes.
+
+## _**5. Assumptions, Caveats & Modifications**_
 
 To align the dataset with the project's simulated business context, the following modifications and assumptions were applied:
 
