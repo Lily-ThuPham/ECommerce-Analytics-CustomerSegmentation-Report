@@ -7,6 +7,7 @@
 3. [Executive Summary](#3-executive-summary)  
 4. [Insights Deep Dive](#4-insights-deep-dive)  
 5. [Recommendations](#5-recommendations)  
+6. [APPENDIX](code/APPENDIX.md)
 
 ## _**1. Project Background**_
 **Olist** is a E-commerce marketplace that connects small businesses (sellers) to customers across the country. As an internal Data Analyst, I have been tasked with analyzing the company's performance from 2016 to 2018 to identify growth opportunities and operational bottlenecks.
