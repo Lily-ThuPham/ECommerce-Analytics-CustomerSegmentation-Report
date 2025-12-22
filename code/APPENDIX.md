@@ -1,6 +1,8 @@
 # Appendix: Project Framework & Technical Architecture
 This document outlines the analytics framework I am using to guide the analysis of the Olist e-commerce dataset. The goal is to ensure that my exploratory data analysis (EDA) and final Power BI reports are focused, efficient, and directly answer key business questions.
 
+For the complete analysis and actionable recommendations, see the full report: [Olist E-Commerce: Full-Stack Analytics & Customer Segmentation](../README.md). 
+
 ## _**1. Data Architecture & ETL Strategy**_
 
 This project simulates a comprehensive Business Intelligence (BI) workflow, engineered to transform raw, disconnected logs into a high-performance Star Schema optimized for analytics and machine learning.

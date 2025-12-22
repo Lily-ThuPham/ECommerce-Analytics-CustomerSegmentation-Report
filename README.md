@@ -20,12 +20,12 @@ The business has seen rapid volume growth since the first operation in 2016, How
 - **Product & Category:** Identify top-performing categories (Pareto analysis) and high-risk to optimize inventory management.
 - **Customer Insights:** Segment the customer base using RFM analysis and K-Means clustering to distinguish "Champions" from "Lost" customers and develop targeted strategies.
 
-_**Technical Stack:**_
+_**Technical Stack & Documentation:**_ A comprehensive technical reference for the full stack is available in the APPENDIX: [code/APPENDIX.md](code/APPENDIX.md).
 - SQL (MySQL): Data warehousing, ETL, and logic views.
 - Python (Pandas/Scikit-Learn): Data cleaning, feature engineering, and K-Means clustering.
 - Power BI: Visualizing and Storytelling with interactive dashboards.
 
-An interactive Power BI dashboard used to explore these insights can be found [here](https://app.powerbi.com/view?r=eyJrIjoiYmUxYjYyN2EtMmU3NS00NzRlLWI4ZjYtNDBjOTE0Y2Y1MDgzIiwidCI6IjE2NzIwYmVkLTY1ZWItNGFhMi04ZjMwLWQxY2UxNzBjZjAwMCIsImMiOjEwfQ%3D%3D&pageName=000e5656b61190d4c961)
+**_An interactive Power BI dashboard_** used to explore these insights can be found [here](https://app.powerbi.com/view?r=eyJrIjoiYmUxYjYyN2EtMmU3NS00NzRlLWI4ZjYtNDBjOTE0Y2Y1MDgzIiwidCI6IjE2NzIwYmVkLTY1ZWItNGFhMi04ZjMwLWQxY2UxNzBjZjAwMCIsImMiOjEwfQ%3D%3D&pageName=000e5656b61190d4c961)
 
 The Python scripts used for the ELT pipeline and Inference Engine can be found [here](code).
 
