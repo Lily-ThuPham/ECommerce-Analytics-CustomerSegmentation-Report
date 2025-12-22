@@ -25,7 +25,7 @@ _**Technical Stack & Documentation:**_ A comprehensive technical reference for t
 - Python (Pandas/Scikit-Learn): Data cleaning, feature engineering, and K-Means clustering.
 - Power BI: Visualizing and Storytelling with interactive dashboards.
 
-**_An interactive Power BI dashboard_** used to explore these insights can be found [here](https://app.powerbi.com/view?r=eyJrIjoiYmUxYjYyN2EtMmU3NS00NzRlLWI4ZjYtNDBjOTE0Y2Y1MDgzIiwidCI6IjE2NzIwYmVkLTY1ZWItNGFhMi04ZjMwLWQxY2UxNzBjZjAwMCIsImMiOjEwfQ%3D%3D&pageName=000e5656b61190d4c961)
+_**An interactive Power BI dashboard**_ used to explore these insights can be found [here](https://app.powerbi.com/view?r=eyJrIjoiYmUxYjYyN2EtMmU3NS00NzRlLWI4ZjYtNDBjOTE0Y2Y1MDgzIiwidCI6IjE2NzIwYmVkLTY1ZWItNGFhMi04ZjMwLWQxY2UxNzBjZjAwMCIsImMiOjEwfQ%3D%3D&pageName=000e5656b61190d4c961)
 
 The Python scripts used for the ELT pipeline and Inference Engine can be found [here](code).
 
