@@ -20,7 +20,7 @@ The business has seen rapid volume growth since the first operation in 2016, How
 - **Product & Category:** Identify top-performing categories (Pareto analysis) and high-risk to optimize inventory management.
 - **Customer Insights:** Segment the customer base using RFM analysis and K-Means clustering to distinguish "Champions" from "Lost" customers and develop targeted strategies.
 
-_**Technical Stack & Documentation:**_ A comprehensive technical reference for the full stack is available in the APPENDIX: [code/APPENDIX.md](code/APPENDIX.md).
+_**Technical Stack & Documentation:**_ A comprehensive technical reference for the full stack is available in the [APPENDIX](code/APPENDIX.md).
 - SQL (MySQL): Data warehousing, ETL, and logic views.
 - Python (Pandas/Scikit-Learn): Data cleaning, feature engineering, and K-Means clustering.
 - Power BI: Visualizing and Storytelling with interactive dashboards.
