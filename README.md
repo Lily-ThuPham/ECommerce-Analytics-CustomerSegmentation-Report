@@ -200,6 +200,8 @@ Thank you for reviewing this E-commerce Site - Olist Analysis. I hope the insigh
 For any questions, further discussions, or to connect, please feel free to reach out:
 
 - Email: thuanhpham.da@gmail.com
-- LinkedIn: Link to My LinkedIn Profile
+- LinkedIn: [Link to My LinkedIn Profile](www.linkedin.com/in/pham-anh-thu)
+
+
 - Other Projects: Explore my other data analytics projects on GitHub.
 - Your feedback is highly valued!
